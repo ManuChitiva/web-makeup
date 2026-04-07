@@ -1,7 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  /* Oculta el badge "N" en dev (no afecta altura del documento, pero evita confusión visual abajo) */
+  devIndicators: false,
 };
 
 export default nextConfig;

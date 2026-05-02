@@ -28,9 +28,9 @@ export default function ProductsSection() {
               <Link
                 key={product.id}
                 href={`/productos/${product.id}`}
-                className="group flex flex-col overflow-hidden rounded-2xl border border-[var(--accent-champagne)]/80 bg-white shadow-[0_2px_12px_rgba(139,67,82,0.06)] transition hover:border-[var(--accent-rose)]/40 hover:shadow-[0_8px_24px_rgba(139,67,82,0.1)]"
+                className="card-beauty card-beauty--lift group flex flex-col overflow-hidden rounded-2xl border border-[var(--accent-champagne)]/80 bg-white hover:border-[var(--accent-rose)]/45 motion-safe:transition-[border-color]"
               >
-                <div className="flex h-48 items-center justify-center bg-[var(--accent-champagne)]/25 text-6xl transition group-hover:bg-[var(--accent-champagne)]/40">
+                <div className="flex h-48 items-center justify-center bg-[var(--accent-champagne)]/25 text-6xl transition duration-500 ease-out group-hover:scale-[1.04] group-hover:bg-[var(--accent-champagne)]/45 motion-reduce:group-hover:scale-100">
                   {product.image}
                 </div>
                 <div className="flex flex-col p-5">
@@ -53,7 +53,7 @@ export default function ProductsSection() {
                       e.stopPropagation();
                       addItem(product.id);
                     }}
-                    className="mt-4 w-full rounded-full border-2 border-[var(--accent-rose)]/50 py-2.5 text-sm font-medium text-[var(--accent-rose-deep)] transition hover:border-[var(--accent-rose)] hover:bg-[var(--accent-champagne)]/30"
+                    className="mt-4 w-full rounded-full border-2 border-[var(--accent-rose)]/50 py-2.5 text-sm font-medium text-[var(--accent-rose-deep)] shadow-sm transition duration-300 hover:border-[var(--accent-rose)] hover:bg-[var(--accent-champagne)]/35 hover:shadow-[0_6px_20px_rgba(183,110,121,0.2)] motion-reduce:hover:shadow-sm"
                   >
                     {getQuantity(product.id) > 0
                       ? `✓ En carrito (${getQuantity(product.id)})`

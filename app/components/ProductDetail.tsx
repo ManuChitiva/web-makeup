@@ -41,8 +41,11 @@ export default function ProductDetail({ product }: ProductDetailProps) {
       <div className="grid gap-8 lg:grid-cols-2 lg:gap-12">
         {/* Columna izquierda: imagen principal + galería */}
         <div className="space-y-4">
-          <div className="aspect-square overflow-hidden rounded-2xl border border-[var(--accent-champagne)]/80 bg-[var(--accent-champagne)]/20 flex items-center justify-center">
-            <span className="text-8xl md:text-9xl" aria-hidden>
+          <div className="card-beauty group relative aspect-square overflow-hidden rounded-2xl border border-[var(--accent-champagne)]/80 bg-[var(--accent-champagne)]/20 flex items-center justify-center">
+            <span
+              className="text-8xl transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07] motion-reduce:group-hover:scale-100 md:text-9xl"
+              aria-hidden
+            >
               {product.image}
             </span>
           </div>
@@ -51,7 +54,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               <button
                 key={i}
                 type="button"
-                className="h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-[var(--accent-champagne)] bg-[var(--accent-champagne)]/30 flex items-center justify-center text-3xl"
+                className="card-beauty--soft card-beauty--lift h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-[var(--accent-champagne)] bg-[var(--accent-champagne)]/30 flex items-center justify-center text-3xl hover:border-[var(--accent-rose)]/35"
                 aria-label={`Ver imagen ${i}`}
               >
                 {product.image}
@@ -128,7 +131,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             <button
               type="button"
               onClick={handleAddToCart}
-              className="rounded-full bg-[var(--accent-rose-deep)] px-6 py-3.5 font-medium text-white transition hover:bg-[var(--accent-rose)]"
+              className="rounded-full bg-[var(--accent-rose-deep)] px-6 py-3.5 font-medium text-white shadow-[0_4px_14px_rgba(139,67,82,0.35)] transition duration-300 hover:bg-[var(--accent-rose)] hover:shadow-[0_8px_28px_rgba(183,110,121,0.45)] motion-reduce:hover:shadow-[0_4px_14px_rgba(139,67,82,0.35)]"
             >
               Añadir al carrito
             </button>
@@ -166,7 +169,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
             {FEATURES.map((f) => (
               <div
                 key={f.label}
-                className="flex flex-col items-center gap-1 rounded-xl border border-[var(--accent-champagne)]/60 bg-[var(--accent-champagne)]/10 p-3 text-center"
+                className="card-beauty--soft card-beauty--lift flex flex-col items-center gap-1 rounded-xl border border-[var(--accent-champagne)]/60 bg-[var(--accent-champagne)]/10 p-3 text-center hover:border-[var(--accent-rose)]/30"
               >
                 <span className="text-xl" aria-hidden>
                   {f.icon}

@@ -63,9 +63,9 @@ export default function MakeupExpertGrid() {
                 <Link
                   key={product.id}
                   href={`/productos/${product.id}`}
-                  className="flex flex-col overflow-hidden rounded-xl border border-[var(--accent-champagne)]/80 bg-white p-5 shadow-[0_2px_12px_rgba(139,67,82,0.06)] transition hover:shadow-[0_8px_24px_rgba(139,67,82,0.1)]"
+                  className="card-beauty--soft card-beauty--lift group flex flex-col overflow-hidden rounded-xl border border-[var(--accent-champagne)]/80 bg-white p-5 hover:border-[var(--accent-rose)]/40 motion-safe:transition-[border-color]"
                 >
-                  <div className="flex h-32 items-center justify-center rounded-lg bg-[var(--accent-champagne)]/25 text-5xl sm:h-36">
+                  <div className="flex h-32 items-center justify-center overflow-hidden rounded-lg bg-[var(--accent-champagne)]/25 text-5xl transition duration-500 ease-out group-hover:scale-[1.05] group-hover:bg-[var(--accent-champagne)]/40 sm:h-36 motion-reduce:group-hover:scale-100">
                     {product.image}
                   </div>
                   <h3 className="mt-3 line-clamp-2 font-sans text-xs font-semibold uppercase leading-tight text-[var(--accent-rose-deep)] sm:text-sm">

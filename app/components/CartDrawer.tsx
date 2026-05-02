@@ -73,7 +73,7 @@ export default function CartDrawer() {
                 return (
                   <li
                     key={item.productId}
-                    className="flex gap-4 rounded-xl border border-[var(--accent-champagne)]/50 bg-[var(--background)] p-3"
+                    className="card-beauty--soft flex gap-4 rounded-xl border border-[var(--accent-champagne)]/50 bg-[var(--background)] p-3 motion-safe:transition-shadow"
                   >
                     <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-[var(--accent-champagne)]/30 text-2xl">
                       {product.image}

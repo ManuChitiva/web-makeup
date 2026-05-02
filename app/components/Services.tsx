@@ -72,7 +72,7 @@ export default function Services() {
           {services.map((service, i) => (
             <div
               key={service.title}
-              className="group flex flex-col rounded-2xl border border-[var(--accent-champagne)] bg-[var(--background)] p-6 shadow-sm transition-all duration-300 ease-out hover:-translate-y-1.5 hover:scale-[1.02] hover:border-[var(--accent-rose)]/50 hover:shadow-xl hover:shadow-[var(--accent-rose)]/10"
+              className="card-beauty card-beauty--lift group flex flex-col rounded-2xl border border-[var(--accent-champagne)] bg-[var(--background)] p-6 hover:border-[var(--accent-rose)]/45"
               style={
                 visible
                   ? {
@@ -84,7 +84,7 @@ export default function Services() {
               }
             >
               <span
-                className="inline-block text-3xl transition-transform duration-300 group-hover:scale-110"
+                className="inline-block text-3xl transition-transform duration-500 ease-out motion-safe:group-hover:scale-110 motion-reduce:group-hover:scale-100"
                 role="img"
                 aria-hidden
               >

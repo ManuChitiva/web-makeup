@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { whatsappUrlWithText } from "@/lib/social";
 
 const serviceTypes = [
   "Maquillaje social",
@@ -8,6 +9,50 @@ const serviceTypes = [
   "Editorial / Fotografía",
   "Clase o asesoría",
 ];
+
+function formatDateEs(iso: string): string {
+  if (!iso) return "—";
+  try {
+    const d = new Date(`${iso}T12:00:00`);
+    return d.toLocaleDateString("es-CO", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  } catch {
+    return iso;
+  }
+}
+
+function buildReservationMessage(data: {
+  name: string;
+  email: string;
+  phone: string;
+  date: string;
+  service: string;
+  message: string;
+}): string {
+  const from =
+    typeof window !== "undefined" && window.location.host
+      ? window.location.host
+      : "la web";
+  const lines = [
+    "¡Hola! Quiero agendar una reserva desde la web 🌸",
+    "",
+    `*Nombre:* ${data.name.trim()}`,
+    `*Teléfono:* ${data.phone.trim()}`,
+    `*Correo:* ${data.email.trim()}`,
+    `*Fecha preferida:* ${formatDateEs(data.date)}`,
+    `*Tipo de servicio:* ${data.service}`,
+  ];
+  const extra = data.message.trim();
+  if (extra) {
+    lines.push("", "*Mensaje / detalles:*", extra);
+  }
+  lines.push("", `_Enviado desde ${from}_`);
+  return lines.join("\n");
+}
 
 export default function BookingSection() {
   const [submitted, setSubmitted] = useState(false);
@@ -22,6 +67,10 @@ export default function BookingSection() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const text = buildReservationMessage(formData);
+    const url = whatsappUrlWithText(text);
+    const win = window.open(url, "_blank", "noopener,noreferrer");
+    if (!win) window.location.assign(url);
     setSubmitted(true);
   };
 
@@ -37,16 +86,16 @@ export default function BookingSection() {
         id="reservas"
         className="scroll-mt-24 py-20 px-6"
       >
-        <div className="mx-auto max-w-xl rounded-2xl border border-[var(--accent-champagne)] bg-[var(--accent-champagne)]/20 p-10 text-center">
+        <div className="card-beauty mx-auto max-w-xl rounded-2xl border border-[var(--accent-champagne)] bg-[var(--accent-champagne)]/25 p-10 text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--accent-rose)]/20 text-3xl">
             ✓
           </div>
           <h3 className="mt-4 font-serif text-2xl font-semibold text-[var(--accent-rose-deep)]">
-            ¡Solicitud enviada!
+            ¡Abre WhatsApp y envía el mensaje!
           </h3>
           <p className="mt-2 text-[var(--foreground)]/70">
-            Te contactaremos pronto para confirmar tu reserva. Revisa tu correo
-            y teléfono.
+            Se abrió WhatsApp con tu solicitud ya redactada. Solo confirma el
+            envío; te responderemos ahí para coordinar disponibilidad.
           </p>
           <button
             type="button"
@@ -71,12 +120,13 @@ export default function BookingSection() {
             Agendar reserva
           </h2>
           <p className="mt-3 text-[var(--foreground)]/70">
-            Completa el formulario y te confirmamos disponibilidad.
+            Completa el formulario: te llevamos a WhatsApp con el mensaje listo
+            para enviar.
           </p>
         </div>
         <form
           onSubmit={handleSubmit}
-          className="mt-10 flex flex-col gap-5 rounded-2xl border border-[var(--accent-champagne)] bg-[var(--background)] p-6 shadow-sm sm:p-8"
+          className="card-beauty mt-10 flex flex-col gap-5 rounded-2xl border border-[var(--accent-champagne)] bg-[var(--background)] p-6 sm:p-8"
         >
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5">
@@ -173,7 +223,7 @@ export default function BookingSection() {
             type="submit"
             className="mt-2 rounded-full bg-[var(--accent-rose-deep)] py-3.5 font-medium text-white transition hover:bg-[var(--accent-rose)]"
           >
-            Enviar solicitud de reserva
+            Continuar en WhatsApp
           </button>
         </form>
       </div>

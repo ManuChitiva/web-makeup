@@ -1,4 +1,6 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getSiteUrl } from "@/lib/site";
 import { getProductById } from "../../data/products";
 import Header from "../../components/Header";
 import ProductDetail from "../../components/ProductDetail";
@@ -20,12 +22,38 @@ export default async function ProductPage({ params }: PageProps) {
   );
 }
 
-export async function generateMetadata({ params }: PageProps) {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const product = getProductById(id);
-  if (!product) return { title: "Producto no encontrado" };
+  if (!product) return { title: "Producto no encontrado", robots: { index: false } };
+
+  const description =
+    product.description ??
+    `${product.name} — cosmético en CamilaPalaciosMakeup.`;
+
+  const path = `/productos/${id}`;
+
   return {
-    title: `${product.name} | CamilaPalaciosMakeup`,
-    description: product.description ?? `Producto ${product.name} - Camila Palacios Makeup Studio`,
+    title: product.name,
+    description,
+    keywords: [
+      product.name,
+      product.category,
+      "maquillaje",
+      product.sku ?? "",
+    ].filter(Boolean),
+    alternates: { canonical: path },
+    openGraph: {
+      title: product.name,
+      description,
+      url: `${getSiteUrl().origin}${path}`,
+      type: "website",
+      locale: "es_CO",
+    },
+    twitter: {
+      card: "summary",
+      title: product.name,
+      description,
+    },
   };
 }

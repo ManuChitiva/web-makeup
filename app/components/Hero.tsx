@@ -41,7 +41,7 @@ export default function Hero() {
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4 md:justify-start">
           <a
             href="#reservas"
-            className="rounded-full bg-[var(--accent-rose-deep)] px-7 py-3 font-medium text-white shadow-lg transition hover:bg-[var(--accent-rose)] hover:shadow-xl"
+            className="rounded-full bg-[var(--accent-rose-deep)] px-7 py-3 font-medium text-white shadow-[0_6px_20px_rgba(139,67,82,0.35)] transition duration-500 hover:bg-[var(--accent-rose)] hover:shadow-[0_12px_36px_rgba(183,110,121,0.42)] hover:-translate-y-0.5 motion-reduce:hover:translate-y-0 motion-reduce:hover:shadow-[0_6px_20px_rgba(139,67,82,0.35)]"
           >
             Agendar reserva
           </a>
@@ -54,7 +54,7 @@ export default function Hero() {
         </div>
       </div>
       <div className="relative z-10 mt-10 flex w-full shrink-0 justify-center md:mt-0 md:max-w-lg md:flex-1">
-        <div className="relative aspect-[3/4] w-full max-w-sm overflow-hidden rounded-2xl shadow-xl ring-1 ring-[var(--accent-champagne)]/50">
+        <div className="hero-portrait-glow hero-portrait-float relative aspect-[3/4] w-full max-w-sm overflow-hidden rounded-2xl ring-1 ring-[var(--accent-champagne)]/40">
           <Image
             src="/hero-camila.png"
             alt="Camila Palacios - Maquilladora profesional"

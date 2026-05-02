@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { loadCatalogProducts } from "@/lib/catalog";
 import { getSiteUrl } from "@/lib/site";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -19,12 +20,14 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ProductosCatalogoPage() {
+export default async function ProductosCatalogoPage() {
+  const catalog = await loadCatalogProducts();
+
   return (
     <div className="site-content w-full bg-[var(--background)]">
       <Header />
       <main className="pt-20">
-        <ProductCatalog />
+        <ProductCatalog products={catalog} />
       </main>
       <Footer />
     </div>

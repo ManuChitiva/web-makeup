@@ -1,12 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useCart } from "../context/CartContext";
-import { getProductById } from "../data/products";
+import {
+  findProductById,
+  useCatalogProducts,
+} from "../context/CatalogContext";
 
 export default function CartDrawer() {
   const [mounted, setMounted] = useState(false);
+  const catalogProducts = useCatalogProducts();
   const { items, removeItem, updateQuantity, totalItems, isOpen, closeCart } =
     useCart();
 
@@ -15,7 +20,7 @@ export default function CartDrawer() {
   }, []);
 
   const total = items.reduce((sum, item) => {
-    const product = getProductById(item.productId);
+    const product = findProductById(catalogProducts, item.productId);
     return sum + (product ? product.priceNumber * item.quantity : 0);
   }, 0);
 
@@ -68,7 +73,7 @@ export default function CartDrawer() {
           ) : (
             <ul className="space-y-4">
               {items.map((item) => {
-                const product = getProductById(item.productId);
+                const product = findProductById(catalogProducts, item.productId);
                 if (!product) return null;
                 return (
                   <li
@@ -140,15 +145,16 @@ export default function CartDrawer() {
               <span>${formatPrice(total)}</span>
             </div>
             <p className="mt-2 text-center text-sm text-[var(--foreground)]/60">
-              Checkout y pagos online próximamente. Consulta por WhatsApp para reservar.
+              Revisa el total y completa el pago (PayU) o pide por WhatsApp desde
+              la página de carrito.
             </p>
-            <button
-              type="button"
-              disabled
-              className="mt-4 w-full rounded-full bg-[var(--accent-rose)]/50 py-3 font-medium text-white cursor-not-allowed"
+            <Link
+              href="/carrito"
+              onClick={closeCart}
+              className="mt-4 flex w-full items-center justify-center rounded-full bg-[var(--accent-rose-deep)] py-3 text-center font-medium text-white shadow-md transition hover:bg-[var(--accent-rose)]"
             >
-              Finalizar reserva (próximamente)
-            </button>
+              Ver resumen y pagar
+            </Link>
           </div>
         )}
       </aside>

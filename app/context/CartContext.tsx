@@ -41,6 +41,7 @@ type CartContextType = {
   addItem: (productId: string, quantity?: number) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  clear: () => void;
   getQuantity: (productId: string) => number;
   totalItems: number;
   isOpen: boolean;
@@ -101,6 +102,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
   }, [removeItem]);
 
+  const clear = useCallback(() => setItems([]), []);
+
   const getQuantity = useCallback(
     (productId: string) =>
       items.find((i) => i.productId === productId)?.quantity ?? 0,
@@ -120,6 +123,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
         addItem,
         removeItem,
         updateQuantity,
+        clear,
         getQuantity,
         totalItems,
         isOpen,

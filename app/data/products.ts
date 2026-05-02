@@ -6,6 +6,10 @@ export type Product = {
   name: string;
   price: string;
   priceNumber: number;
+  /** Imagen remota cuando viene de la STORE API (`imageUrl`). */
+  imageUrl?: string;
+  /** Stock reportado por la API; opcional para mocks locales. */
+  availableQuantity?: number;
   isService?: boolean;
   category: string;
   image: string;
@@ -18,9 +22,8 @@ export type Product = {
   priceFrom?: boolean;
   moreColors?: number;
 };
-
-/** API 1: Catálogo de productos (sección Productos de la home) */
-export const products: Product[] = [
+/** Catálogo mock si la STORE API no está configurada o no devuelve datos. */
+export const FALLBACK_CATALOG_PRODUCTS: Product[] = [
   {
     id: "1",
     name: "Maquillaje social completo",
@@ -44,7 +47,13 @@ export const products: Product[] = [
     category: "Servicio",
     image: "✨",
     colors: ["#f5e6d3", "#e8d5c4", "#d4b896", "#b8956a", "#8b7355"],
-    colorNames: ["Porcelana", "Marfil", "Beige natural", "Bronce claro", "Caramelo"],
+    colorNames: [
+      "Porcelana",
+      "Marfil",
+      "Beige natural",
+      "Bronce claro",
+      "Caramelo",
+    ],
     sku: "BASEHD02",
     description:
       "Look glam con enfoque en ojos y piel luminosa, pensado para eventos especiales. Incluye asesoría de estilo según tu vestuario.",
@@ -257,8 +266,7 @@ export const products: Product[] = [
     category: "Servicio",
     image: "🪞",
     sku: "SRV025",
-    description:
-      "Volumen y definición naturales sin apariencia cargada.",
+    description: "Volumen y definición naturales sin apariencia cargada.",
   },
   {
     id: "26",
@@ -522,20 +530,6 @@ export const featuredProducts: Product[] = [
   },
 ];
 
-export function getProductById(id: string): Product | undefined {
-  return products.find((p) => p.id === id) ?? featuredProducts.find((p) => p.id === id);
-}
-
 export function getFeaturedProducts(): Product[] {
   return featuredProducts;
-}
-
-/** IDs destacados en la home (orden fijo); deben existir en `products`. */
-export const HOMEPAGE_CATALOG_IDS = ["1", "2", "3", "4", "5", "6"] as const;
-
-export function getHomepageCatalogProducts(): Product[] {
-  return HOMEPAGE_CATALOG_IDS.flatMap((id) => {
-    const p = products.find((prod) => prod.id === id);
-    return p ? [p] : [];
-  });
 }

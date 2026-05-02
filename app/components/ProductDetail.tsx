@@ -30,6 +30,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
   const selectedColorName =
     product.colorNames?.[selectedColorIndex] ?? `Color ${selectedColorIndex + 1}`;
   const isService = Boolean(product.isService);
+  const imageSrc = product.imageUrl?.trim();
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) addItem(product.id);
@@ -50,12 +51,21 @@ export default function ProductDetail({ product }: ProductDetailProps) {
         {/* Columna izquierda: imagen principal + galería */}
         <div className="space-y-4">
           <div className="card-beauty group relative aspect-square overflow-hidden rounded-2xl border border-[var(--accent-champagne)]/80 bg-[var(--accent-champagne)]/20 flex items-center justify-center">
-            <span
-              className="text-8xl transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07] motion-reduce:group-hover:scale-100 md:text-9xl"
-              aria-hidden
-            >
-              {product.image}
-            </span>
+            {imageSrc ? (
+              /* eslint-disable-next-line @next/next/no-img-element -- URL externa desde STORE API */
+              <img
+                src={imageSrc}
+                alt={product.name}
+                className="absolute inset-0 h-full w-full object-cover transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-safe:group-hover:scale-[1.07] motion-reduce:group-hover:scale-100"
+              />
+            ) : (
+              <span
+                className="text-8xl transition duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.07] motion-reduce:group-hover:scale-100 md:text-9xl"
+                aria-hidden
+              >
+                {product.image}
+              </span>
+            )}
           </div>
           <div className="flex gap-2 overflow-x-auto pb-2">
             {[1, 2, 3, 4].map((i) => (
@@ -65,7 +75,16 @@ export default function ProductDetail({ product }: ProductDetailProps) {
                 className="card-beauty--soft card-beauty--lift h-20 w-20 shrink-0 overflow-hidden rounded-xl border-2 border-[var(--accent-champagne)] bg-[var(--accent-champagne)]/30 flex items-center justify-center text-3xl hover:border-[var(--accent-rose)]/35"
                 aria-label={`Ver imagen ${i}`}
               >
-                {product.image}
+                {imageSrc ? (
+                  /* eslint-disable-next-line @next/next/no-img-element */
+                  <img
+                    src={imageSrc}
+                    alt=""
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  <span aria-hidden>{product.image}</span>
+                )}
               </button>
             ))}
           </div>

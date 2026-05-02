@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { getHomepageCatalogProducts } from "../data/products";
+import type { Product } from "../data/products";
 import ProductCard from "./ProductCard";
 
-const highlighted = getHomepageCatalogProducts();
+type ProductsSectionProps = { products: Product[] };
 
-export default function ProductsSection() {
+export default function ProductsSection({ products }: ProductsSectionProps) {
   return (
     <section
       id="productos"
@@ -23,9 +23,16 @@ export default function ProductsSection() {
         </div>
 
         <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 md:gap-y-10">
-          {highlighted.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
+          {products.length === 0 ? (
+            <p className="col-span-full text-center text-sm text-[var(--foreground)]/70">
+              Aún no hay productos públicos desde la tienda. Revisa tu API o
+              añade artículos activos.
+            </p>
+          ) : (
+            products.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))
+          )}
         </div>
 
         <div className="mt-12 flex justify-center">

@@ -1,12 +1,12 @@
 import type { MetadataRoute } from "next";
-import { featuredProducts, products } from "./data/products";
+import { loadCatalogProducts } from "@/lib/catalog";
 import { getSiteUrl } from "@/lib/site";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = getSiteUrl().origin;
+  const catalog = await loadCatalogProducts();
   const ids = new Set<string>();
-  for (const p of products) ids.add(p.id);
-  for (const p of featuredProducts) ids.add(p.id);
+  for (const p of catalog) ids.add(p.id);
 
   const entries: MetadataRoute.Sitemap = [
     {

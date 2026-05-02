@@ -9,14 +9,30 @@ type ProductCardProps = { product: Product };
 
 export default function ProductCard({ product }: ProductCardProps) {
   const { addItem, getQuantity } = useCart();
+  const imageSrc = product.imageUrl?.trim();
 
   return (
     <Link
       href={`/productos/${product.id}`}
       className="card-beauty card-beauty--lift group flex flex-col overflow-hidden rounded-2xl border border-[var(--accent-champagne)]/80 bg-white hover:border-[var(--accent-rose)]/45 motion-safe:transition-[border-color]"
     >
-      <div className="flex h-48 items-center justify-center bg-[var(--accent-champagne)]/25 text-6xl transition duration-500 ease-out group-hover:scale-[1.04] group-hover:bg-[var(--accent-champagne)]/45 motion-reduce:group-hover:scale-100">
-        {product.image}
+      <div
+        className={`relative flex h-48 overflow-hidden bg-[var(--accent-champagne)]/25 transition duration-500 ease-out group-hover:bg-[var(--accent-champagne)]/45 ${
+          imageSrc ? "" : "items-center justify-center text-6xl"
+        }`}
+      >
+        {imageSrc ? (
+          /* eslint-disable-next-line @next/next/no-img-element -- URLs externas desde STORE API sin dominios fijos en next.config */
+          <img
+            src={imageSrc}
+            alt=""
+            className="h-full w-full object-cover transition duration-500 ease-out motion-safe:group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
+          />
+        ) : (
+          <span className="transition duration-500 ease-out motion-safe:group-hover:scale-[1.04] motion-reduce:group-hover:scale-100">
+            {product.image}
+          </span>
+        )}
       </div>
       <div className="flex flex-col p-5">
         <span className="text-xs font-medium uppercase tracking-wider text-[var(--accent-rose)]">

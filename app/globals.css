@@ -78,7 +78,9 @@ body > * {
 }
 
 .site-content > main {
-  margin: 0 !important;
+  /* Solo margen vertical: margin: 0 !important aquí rompía mx-auto en el main (ej. carrito). */
+  margin-block: 0 !important;
+  margin-inline: auto;
   padding-bottom: 0 !important;
   /* Flow root: evita colapso de márgenes del último hijo → scroll “fantasma” bajo el footer */
   display: flow-root;

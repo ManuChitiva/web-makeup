@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { loadCatalogProducts } from "@/lib/catalog";
 import Header from "./components/Header";
 import Hero from "./components/Hero";
 import Services from "./components/Services";
@@ -11,7 +12,11 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
 };
 
-export default function Home() {
+export default async function Home() {
+  const catalog = await loadCatalogProducts();
+  const homepageCatalog = catalog.slice(0, 6);
+  const makeupExpertCatalog = catalog.slice(6, 12);
+
   return (
     <div className="site-content w-full bg-[var(--background)]">
       <Header />
@@ -19,8 +24,8 @@ export default function Home() {
         <Hero />
         <Services />
         <BookingSection />
-        <ProductsSection />
-        <MakeupExpertGrid />
+        <ProductsSection products={homepageCatalog} />
+        <MakeupExpertGrid products={makeupExpertCatalog} />
         <Footer />
       </main>
     </div>

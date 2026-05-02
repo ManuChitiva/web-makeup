@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSiteUrl } from "@/lib/site";
-import { getProductById } from "../../data/products";
+import { resolveProductById } from "@/lib/catalog";
 import Header from "../../components/Header";
 import ProductDetail from "../../components/ProductDetail";
 
@@ -9,7 +9,7 @@ type PageProps = { params: Promise<{ id: string }> };
 
 export default async function ProductPage({ params }: PageProps) {
   const { id } = await params;
-  const product = getProductById(id);
+  const product = await resolveProductById(id);
   if (!product) notFound();
 
   return (
@@ -24,7 +24,7 @@ export default async function ProductPage({ params }: PageProps) {
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
-  const product = getProductById(id);
+  const product = await resolveProductById(id);
   if (!product) return { title: "Elemento no encontrado", robots: { index: false } };
   const itemType = product.isService ? "servicio" : "producto";
 

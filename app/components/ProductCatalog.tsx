@@ -1,10 +1,12 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { products } from "../data/products";
+import type { Product } from "../data/products";
 import ProductCard from "./ProductCard";
 
 const ITEMS_PER_PAGE = 8;
+
+type ProductCatalogProps = { products: Product[] };
 
 type OfferFilter = "all" | "service" | "product";
 type SortKey = "default" | "name-asc" | "name-desc" | "price-asc" | "price-desc";
@@ -16,7 +18,7 @@ function normalize(s: string) {
     .replace(/[\u0300-\u036f]/g, "");
 }
 
-export default function ProductCatalog() {
+export default function ProductCatalog({ products }: ProductCatalogProps) {
   const [query, setQuery] = useState("");
   const [category, setCategory] = useState<string>("all");
   const [offer, setOffer] = useState<OfferFilter>("all");
@@ -26,7 +28,7 @@ export default function ProductCatalog() {
   const categories = useMemo(() => {
     const set = new Set(products.map((p) => p.category));
     return [...set].sort((a, b) => a.localeCompare(b, "es"));
-  }, []);
+  }, [products]);
 
   const filtered = useMemo(() => {
     const q = normalize(query.trim());
@@ -58,7 +60,7 @@ export default function ProductCatalog() {
         break;
     }
     return list;
-  }, [query, category, offer, sortKey]);
+  }, [products, query, category, offer, sortKey]);
 
   const pageCount = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
 

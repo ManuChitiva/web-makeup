@@ -2,9 +2,14 @@ import type { Metadata } from "next";
 import { Playfair_Display, Outfit, Great_Vibes } from "next/font/google";
 import { getSiteUrl } from "@/lib/site";
 import { socialLinks } from "@/lib/social";
+import { loadCatalogProducts } from "@/lib/catalog";
+import { CatalogProvider } from "./context/CatalogContext";
 import { CartProvider } from "./context/CartContext";
 import CartDrawer from "./components/CartDrawer";
 import "./globals.css";
+
+/** Igual que store-landing-page: catálogo STORE API en cada request. */
+export const dynamic = "force-dynamic";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -99,11 +104,12 @@ function organizationJsonLd() {
   };
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const catalogProducts = await loadCatalogProducts();
   const jsonLd = JSON.stringify(organizationJsonLd());
 
   return (
@@ -118,10 +124,12 @@ export default function RootLayout({
         className={`${playfair.variable} ${outfit.variable} ${greatVibes.variable} m-0 min-h-0 h-auto p-0 font-sans antialiased`}
       >
         <div id="app-shell">
-          <CartProvider>
-            {children}
-            <CartDrawer />
-          </CartProvider>
+          <CatalogProvider products={catalogProducts}>
+            <CartProvider>
+              {children}
+              <CartDrawer />
+            </CartProvider>
+          </CatalogProvider>
         </div>
       </body>
     </html>

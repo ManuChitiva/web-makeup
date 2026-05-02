@@ -15,6 +15,13 @@ const FEATURES = [
   { label: "Fácil difuminación", icon: "🖌️" },
 ];
 
+const SERVICE_FEATURES = [
+  { label: "Asesoría personalizada", icon: "✨" },
+  { label: "Duración aprox. 60-90 min", icon: "⏱️" },
+  { label: "Productos profesionales", icon: "💄" },
+  { label: "Reserva por WhatsApp", icon: "📲" },
+];
+
 export default function ProductDetail({ product }: ProductDetailProps) {
   const [selectedColorIndex, setSelectedColorIndex] = useState<number>(0);
   const [quantity, setQuantity] = useState(1);
@@ -22,6 +29,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
 
   const selectedColorName =
     product.colorNames?.[selectedColorIndex] ?? `Color ${selectedColorIndex + 1}`;
+  const isService = Boolean(product.isService);
 
   const handleAddToCart = () => {
     for (let i = 0; i < quantity; i++) addItem(product.id);
@@ -31,10 +39,10 @@ export default function ProductDetail({ product }: ProductDetailProps) {
     <div className="mx-auto max-w-6xl px-4 py-8 md:py-12">
       <div className="mb-6">
         <Link
-          href="/#productos"
+          href="/productos"
           className="text-sm font-medium text-[var(--accent-rose)] hover:text-[var(--accent-rose-deep)]"
         >
-          ← Volver a productos
+          ← Volver al catálogo
         </Link>
       </div>
 
@@ -70,7 +78,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           </h1>
           {product.sku && (
             <p className="mt-1 text-sm text-[var(--foreground)]/60">
-              SKU: {product.sku}
+              {isService ? "Código del servicio" : "SKU"}: {product.sku}
             </p>
           )}
           <p className="mt-3 text-2xl font-bold text-[var(--foreground)]">
@@ -101,7 +109,7 @@ export default function ProductDetail({ product }: ProductDetailProps) {
           {/* Cantidad */}
           <div className="mt-6 flex items-center gap-3">
             <span className="text-sm font-medium text-[var(--foreground)]">
-              Cantidad:
+              {isService ? "Sesiones:" : "Cantidad:"}
             </span>
             <div className="flex items-center rounded-full border border-[var(--accent-champagne)]">
               <button
@@ -133,25 +141,29 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               onClick={handleAddToCart}
               className="rounded-full bg-[var(--accent-rose-deep)] px-6 py-3.5 font-medium text-white shadow-[0_4px_14px_rgba(139,67,82,0.35)] transition duration-300 hover:bg-[var(--accent-rose)] hover:shadow-[0_8px_28px_rgba(183,110,121,0.45)] motion-reduce:hover:shadow-[0_4px_14px_rgba(139,67,82,0.35)]"
             >
-              Añadir al carrito
+              {isService ? "Añadir servicio" : "Añadir al carrito"}
             </button>
             <button
               type="button"
               className="rounded-full border-2 border-[var(--accent-rose-deep)] px-6 py-3.5 font-medium text-[var(--accent-rose-deep)] transition hover:bg-[var(--accent-champagne)]/30"
             >
-              Comprar ahora (próximamente)
+              {isService
+                ? "Reservar por WhatsApp (próximamente)"
+                : "Comprar ahora (próximamente)"}
             </button>
           </div>
 
           {/* Envíos */}
           <p className="mt-6 text-sm text-[var(--foreground)]/70">
-            Envíos con Coordinadora. Recibe de 8 a 15 días hábiles.
+            {isService
+              ? "Agenda flexible sujeta a disponibilidad. Confirmación por WhatsApp."
+              : "Envíos con Coordinadora. Recibe de 8 a 15 días hábiles."}
           </p>
 
           {/* Métodos de pago (mock) */}
           <div className="mt-4 flex flex-wrap items-center gap-3">
             <span className="text-xs text-[var(--foreground)]/60">
-              Pagos con:
+              {isService ? "Reserva con:" : "Pagos con:"}
             </span>
             <span className="rounded bg-[var(--accent-champagne)]/40 px-2 py-1 text-xs font-medium">
               Mercado Pago
@@ -160,13 +172,13 @@ export default function ProductDetail({ product }: ProductDetailProps) {
               PSE
             </span>
             <span className="text-xs text-[var(--foreground)]/60">
-              Hasta 6 cuotas sin interés
+              {isService ? "Anticipo para confirmar cupo" : "Hasta 6 cuotas sin interés"}
             </span>
           </div>
 
           {/* Características */}
           <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {FEATURES.map((f) => (
+            {(isService ? SERVICE_FEATURES : FEATURES).map((f) => (
               <div
                 key={f.label}
                 className="card-beauty--soft card-beauty--lift flex flex-col items-center gap-1 rounded-xl border border-[var(--accent-champagne)]/60 bg-[var(--accent-champagne)]/10 p-3 text-center hover:border-[var(--accent-rose)]/30"

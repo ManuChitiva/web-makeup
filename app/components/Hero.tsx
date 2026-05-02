@@ -46,10 +46,10 @@ export default function Hero() {
             Agendar reserva
           </a>
           <a
-            href="#productos"
+            href="/productos"
             className="rounded-full border-2 border-[var(--accent-rose)]/50 px-7 py-3 font-medium text-[var(--accent-rose-deep)] transition hover:border-[var(--accent-rose)] hover:bg-[var(--accent-champagne)]/30"
           >
-            Ver productos
+            Ver catálogo
           </a>
         </div>
       </div>

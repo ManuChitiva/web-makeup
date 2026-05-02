@@ -54,7 +54,7 @@ export default function CartDrawer() {
             <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
               <span className="text-5xl opacity-50">🛒</span>
               <p className="text-[var(--foreground)]/70">
-                Tu carrito está vacío. Añade productos desde la sección
+                Tu carrito está vacío. Añade servicios desde la sección
                 Productos.
               </p>
               <button
@@ -62,7 +62,7 @@ export default function CartDrawer() {
                 onClick={closeCart}
                 className="mt-2 rounded-full bg-[var(--accent-rose-deep)] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--accent-rose)]"
               >
-                Seguir comprando
+                Ver servicios
               </button>
             </div>
           ) : (
@@ -136,18 +136,18 @@ export default function CartDrawer() {
         {items.length > 0 && (
           <div className="border-t border-[var(--accent-champagne)]/50 px-6 py-4">
             <div className="flex items-center justify-between text-lg font-semibold text-[var(--accent-rose-deep)]">
-              <span>Total ({totalItems} {totalItems === 1 ? "producto" : "productos"})</span>
+              <span>Total ({totalItems} {totalItems === 1 ? "servicio" : "servicios"})</span>
               <span>${formatPrice(total)}</span>
             </div>
             <p className="mt-2 text-center text-sm text-[var(--foreground)]/60">
-              Checkout y envíos próximamente. Consulta por WhatsApp para reservar.
+              Checkout y pagos online próximamente. Consulta por WhatsApp para reservar.
             </p>
             <button
               type="button"
               disabled
               className="mt-4 w-full rounded-full bg-[var(--accent-rose)]/50 py-3 font-medium text-white cursor-not-allowed"
             >
-              Finalizar compra (próximamente)
+              Finalizar reserva (próximamente)
             </button>
           </div>
         )}

@@ -25,11 +25,12 @@ export default async function ProductPage({ params }: PageProps) {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { id } = await params;
   const product = getProductById(id);
-  if (!product) return { title: "Producto no encontrado", robots: { index: false } };
+  if (!product) return { title: "Elemento no encontrado", robots: { index: false } };
+  const itemType = product.isService ? "servicio" : "producto";
 
   const description =
     product.description ??
-    `${product.name} — cosmético en CamilaPalaciosMakeup.`;
+    `${product.name} — ${itemType} disponible en CamilaPalaciosMakeup.`;
 
   const path = `/productos/${id}`;
 
@@ -40,6 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       product.name,
       product.category,
       "maquillaje",
+      itemType,
       product.sku ?? "",
     ].filter(Boolean),
     alternates: { canonical: path },

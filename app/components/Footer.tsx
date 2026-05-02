@@ -5,7 +5,7 @@ const footerNav = [
   { href: "/#inicio", label: "Inicio" },
   { href: "/#servicios", label: "Servicios" },
   { href: "/#reservas", label: "Reservas" },
-  { href: "/#productos", label: "Productos" },
+  { href: "/productos", label: "Productos" },
 ] as const;
 
 function MailIcon({ className }: { className?: string }) {

@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Playfair_Display, Outfit, Great_Vibes } from "next/font/google";
 import { getSiteUrl } from "@/lib/site";
-import { socialLinks } from "@/lib/social";
 import { loadCatalogServices } from "@/lib/catalog";
+import { businessJsonLd, serializeJsonLd } from "@/lib/seo";
 import { CatalogProvider } from "./context/CatalogContext";
 import { CartProvider } from "./context/CartContext";
 import CartDrawer from "./components/CartDrawer";
@@ -29,43 +29,36 @@ const greatVibes = Great_Vibes({
 });
 
 const siteDescription =
-  "Servicios de maquillaje profesional para eventos, novias, fotografía y clases en Colombia. Conoce las opciones y reserva tu cita.";
+  "Maquillaje profesional en Villavicencio, Meta: novias, eventos, fotografía y clases de automaquillaje. Conoce los servicios de Camila Palacios Makeup Studio.";
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrl(),
   title: {
     default:
-      "CamilaPalaciosMakeup — Servicios de maquillaje profesional",
-    template: "%s | CamilaPalaciosMakeup",
+      "Maquillaje en Villavicencio, Meta | Camila Palacios",
+    template: "%s | Camila Palacios",
   },
   description: siteDescription,
-  keywords: [
-    "maquillaje profesional",
-    "maquillaje de novias",
-    "makeup Colombia",
-    "maquillaje social",
-    "maquillaje editorial",
-    "clases de automaquillaje",
-    "Camila Palacios",
-  ],
   authors: [{ name: "Camila Palacios", url: getSiteUrl().href }],
-  creator: "CamilaPalaciosMakeup",
-  publisher: "CamilaPalaciosMakeup",
+  creator: "Camila Palacios Makeup Studio",
+  publisher: "Camila Palacios Makeup Studio",
   formatDetection: { email: true, telephone: true },
   openGraph: {
     type: "website",
     locale: "es_CO",
     alternateLocale: ["es"],
-    siteName: "CamilaPalaciosMakeup",
+    siteName: "Camila Palacios Makeup Studio",
     title:
-      "CamilaPalaciosMakeup — Servicios de maquillaje profesional",
+      "Maquillaje en Villavicencio, Meta | Camila Palacios",
     description: siteDescription,
     url: getSiteUrl().href,
+    images: [{ url: "/hero-camila-portrait.png", alt: "Camila Palacios Makeup Studio en Villavicencio" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "CamilaPalaciosMakeup — Servicios de maquillaje profesional",
+    title: "Maquillaje en Villavicencio, Meta | Camila Palacios",
     description: siteDescription,
+    images: ["/hero-camila-portrait.png"],
   },
   robots: {
     index: true,
@@ -79,36 +72,13 @@ export const metadata: Metadata = {
   },
 };
 
-function organizationJsonLd() {
-  const url = getSiteUrl().href;
-  return {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "@id": `${url}#business`,
-    name: "CamilaPalaciosMakeup",
-    description:
-      "Servicios de maquillaje profesional para eventos, novias, sesiones fotográficas y clases.",
-    url,
-    telephone: "+573205489374",
-    email: "camilapalaciosmakeup@gmail.com",
-    areaServed: { "@type": "Country", name: "Colombia" },
-    serviceType: [
-      "Maquillaje profesional",
-      "Maquillaje de novias",
-      "Maquillaje editorial y fotografía",
-      "Clases de automaquillaje",
-    ],
-    sameAs: [socialLinks.instagram, socialLinks.facebook],
-  };
-}
-
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const catalogServices = loadCatalogServices();
-  const jsonLd = JSON.stringify(organizationJsonLd());
+  const jsonLd = serializeJsonLd(businessJsonLd());
 
   return (
     <html lang="es-CO" className="scroll-smooth m-0 min-h-0 h-auto p-0" suppressHydrationWarning>

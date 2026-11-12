@@ -19,7 +19,7 @@ export default function ProductsSection({ services }: ProductsSectionProps) {
             <h2 className="display-title">Un look para <em>cada momento.</em></h2>
           </div>
           <p className="section-intro">
-            Cada rostro tiene algo único. Descubre el servicio que mejor acompaña tu ocasión.
+            Descubre nuestros servicios de maquillaje en Villavicencio, Meta, y encuentra el look que mejor acompaña tu ocasión.
           </p>
         </div>
 

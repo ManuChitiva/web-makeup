@@ -15,7 +15,7 @@ export default function Footer() {
         <div className="footer-editorial__top">
           <div className="footer-editorial__brand">
             <LogoText variant="footer" />
-            <p>Belleza auténtica para momentos que merecen recordarse.</p>
+            <p>Belleza auténtica para momentos que merecen recordarse en Villavicencio.</p>
           </div>
           <div>
             <h2>EXPLORA</h2>
@@ -25,6 +25,7 @@ export default function Footer() {
           </div>
           <div>
             <h2>HABLEMOS</h2>
+            <address className="mb-4 not-italic leading-6">Quintas del Bosque 2, Cl. 5a<br />Villavicencio, Meta, Colombia</address>
             <a href={`https://wa.me/${whatsappWaNumber}`} target="_blank" rel="noopener noreferrer">WhatsApp +57 320 548 9374</a>
             <a href="mailto:camilapalaciosmakeup@gmail.com">camilapalaciosmakeup@gmail.com</a>
           </div>
@@ -36,7 +37,7 @@ export default function Footer() {
         </div>
         <div className="footer-editorial__bottom">
           <span>© {new Date().getFullYear()} Camila Palacios Makeup Studio</span>
-          <span>Hecho con intención en Colombia</span>
+          <span>Hecho con intención en Villavicencio, Meta</span>
         </div>
       </div>
     </footer>

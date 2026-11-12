@@ -121,6 +121,7 @@ body { margin: 0; background: var(--background); color: var(--foreground); font-
 .footer-editorial { padding: 76px 0 0; background: #2c2423; color: #e7ddd5; }
 .footer-editorial__top { display: grid; grid-template-columns: 2fr 1fr 1.5fr 1fr; gap: 45px; padding-bottom: 84px; }
 .footer-editorial__brand p { max-width: 230px; margin: 25px 0 0; color: #bfaea6; font-size: 14px; line-height: 1.7; }
+.footer-editorial address { color: #e7ddd5; font-size: 13px; line-height: 1.6; }
 .footer-editorial h2 { margin: 5px 0 24px; color: #c9a395; font-size: 10px; font-weight: 700; letter-spacing: .2em; }
 .footer-editorial nav { display: flex; flex-direction: column; gap: 13px; }
 .footer-editorial__top > div:not(:first-child) > a { display: block; margin-bottom: 13px; }

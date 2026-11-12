@@ -14,6 +14,8 @@ export default function ProductDetail({ service }: { service: Service }) {
   return (
     <div className="section-container pb-20 pt-8 md:pb-28 md:pt-12">
       <nav className="mb-8 flex flex-wrap items-center gap-2 text-xs text-[var(--foreground)]/55" aria-label="Ruta de navegación">
+        <Link href="/" className="hover:text-[var(--accent-rose-deep)]">Inicio</Link>
+        <span aria-hidden>/</span>
         <Link href="/servicios" className="hover:text-[var(--accent-rose-deep)]">Servicios</Link>
         <span aria-hidden>/</span>
         <span className="text-[var(--foreground)]">{service.name}</span>
@@ -27,6 +29,7 @@ export default function ProductDetail({ service }: { service: Service }) {
           <h1 className="display-title mt-5">{service.name}</h1>
           <p className="mt-7 max-w-lg text-base leading-8 text-[#6f625d]">{service.description}</p>
           <p className="mt-5 max-w-lg text-sm leading-7 text-[#81736d]">Cuéntanos tu idea y la fecha que tienes en mente. Te confirmaremos disponibilidad y valor según los detalles de tu cita.</p>
+          <p className="mt-3 text-sm text-[#81736d]">Estudio en Villavicencio, Meta.</p>
           <p className="mt-3 text-xs text-[#81736d]">Fotografía de referencia.</p>
           <div className="mt-9 flex flex-wrap gap-3">
             <a href={whatsappUrlWithText(message)} target="_blank" rel="noopener noreferrer" className="button-primary">Consultar este servicio <span aria-hidden>↗</span></a>
@@ -39,6 +42,15 @@ export default function ProductDetail({ service }: { service: Service }) {
           <Link href="/servicios" className="text-link mt-9 self-start">Ver más servicios <span aria-hidden>→</span></Link>
         </div>
       </div>
+      <section className="mt-16 grid gap-8 border-t border-[#ded2c7] pt-12 md:mt-24 md:grid-cols-[minmax(0,.8fr)_minmax(0,1.2fr)] md:gap-16" aria-labelledby="service-information-title" data-reveal>
+        <div>
+          <p className="eyebrow"><span /> SOBRE EL SERVICIO</p>
+          <h2 id="service-information-title" className="mt-4 font-serif text-3xl leading-tight md:text-4xl">Una propuesta <em className="text-[var(--accent-rose)]">a tu medida.</em></h2>
+        </div>
+        <div className="space-y-5 text-base leading-8 text-[#6f625d]">
+          {service.details.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
+        </div>
+      </section>
     </div>
   );
 }

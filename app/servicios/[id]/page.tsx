@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getSiteUrl } from "@/lib/site";
 import { loadCatalogServices, resolveServiceById } from "@/lib/catalog";
+import { serializeJsonLd, serviceBreadcrumbJsonLd, serviceJsonLd } from "@/lib/seo";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
 import ProductDetail from "../../components/ProductDetail";
@@ -19,6 +20,7 @@ export default async function ServicePage({ params }: PageProps) {
 
   return (
     <div className="site-content w-full bg-[var(--background)]">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: serializeJsonLd([serviceJsonLd(service), serviceBreadcrumbJsonLd(service)]) }} />
       <Header />
       <main className="pt-20"><ProductDetail service={service} /></main>
       <Footer />
@@ -32,17 +34,22 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!service) return { title: "Servicio no encontrado", robots: { index: false } };
   const path = `/servicios/${id}`;
   return {
-    title: service.name,
-    description: service.description,
-    keywords: [service.name, service.category, "maquillaje profesional", "servicio"],
+    title: service.seoTitle,
+    description: service.seoDescription,
     alternates: { canonical: path },
     openGraph: {
-      title: service.name,
-      description: service.description,
+      title: service.seoTitle,
+      description: service.seoDescription,
       url: `${getSiteUrl().origin}${path}`,
-      images: [service.imageUrl],
+      images: [{ url: service.imageUrl, alt: service.imageAlt }],
       type: "website",
       locale: "es_CO",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: service.seoTitle,
+      description: service.seoDescription,
+      images: [service.imageUrl],
     },
   };
 }

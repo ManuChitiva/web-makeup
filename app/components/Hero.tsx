@@ -5,15 +5,15 @@ export default function Hero() {
     <section id="inicio" className="hero-editorial scroll-mt-24" aria-labelledby="hero-title">
       <div className="hero-editorial__content">
         <div className="hero-editorial__inner">
-          <p className="eyebrow"><span /> CAMILA PALACIOS MAKEUP STUDIO</p>
+          <p className="eyebrow"><span /> CAMILA PALACIOS · VILLAVICENCIO, META</p>
           <h1 id="hero-title" className="hero-editorial__title">
             Tu belleza,<br />
             <em>en su mejor</em><br />
             versión.
           </h1>
           <p className="hero-editorial__description">
-            Maquillaje profesional pensado para ti, para tu historia y para cada
-            momento que merece sentirse especial.
+            Desde nuestro estudio en Villavicencio, Meta, creamos maquillaje
+            profesional pensado para ti y para cada momento especial.
           </p>
           <div className="hero-editorial__actions">
             <a href="#reservas" className="button-primary">

@@ -20,9 +20,9 @@ export default function ProductCatalog({ services }: { services: Service[] }) {
   return (
     <div className="section-container pb-20 pt-12 md:pb-28 md:pt-20">
       <div className="max-w-3xl" data-reveal>
-        <p className="eyebrow"><span /> NUESTROS SERVICIOS</p>
-        <h1 className="display-title">Belleza para <em>tu momento.</em></h1>
-        <p className="mt-5 text-base leading-7 text-[#6f625d]">Explora nuestros servicios de maquillaje y elige la experiencia que mejor acompaña tu historia.</p>
+        <p className="eyebrow"><span /> VILLAVICENCIO · META</p>
+        <h1 className="display-title">Servicios de maquillaje <em>para tu momento.</em></h1>
+        <p className="mt-5 text-base leading-7 text-[#6f625d]">En nuestro estudio de Villavicencio encontrarás maquillaje para eventos, novias, fotografía y clases. Explora cada servicio y cuéntanos qué tienes en mente.</p>
       </div>
       <label data-reveal className="mt-12 flex max-w-md flex-col gap-2 text-xs font-semibold uppercase tracking-[0.13em] text-[var(--accent-rose-deep)]">
         Buscar servicio

@@ -2,14 +2,12 @@ import type { Metadata } from "next";
 import { Playfair_Display, Outfit, Great_Vibes } from "next/font/google";
 import { getSiteUrl } from "@/lib/site";
 import { socialLinks } from "@/lib/social";
-import { loadCatalogProducts } from "@/lib/catalog";
+import { loadCatalogServices } from "@/lib/catalog";
 import { CatalogProvider } from "./context/CatalogContext";
 import { CartProvider } from "./context/CartContext";
 import CartDrawer from "./components/CartDrawer";
+import MotionEnhancer from "./components/MotionEnhancer";
 import "./globals.css";
-
-/** Igual que store-landing-page: catálogo STORE API en cada request. */
-export const dynamic = "force-dynamic";
 
 const playfair = Playfair_Display({
   variable: "--font-playfair",
@@ -31,13 +29,13 @@ const greatVibes = Great_Vibes({
 });
 
 const siteDescription =
-  "Maquillaje profesional para eventos, novias y ocasiones especiales en Colombia. Reserva tu cita y compra productos seleccionados: bases, brochas, labiales y más.";
+  "Servicios de maquillaje profesional para eventos, novias, fotografía y clases en Colombia. Conoce las opciones y reserva tu cita.";
 
 export const metadata: Metadata = {
   metadataBase: getSiteUrl(),
   title: {
     default:
-      "CamilaPalaciosMakeup — Maquillaje profesional y productos Colombia",
+      "CamilaPalaciosMakeup — Servicios de maquillaje profesional",
     template: "%s | CamilaPalaciosMakeup",
   },
   description: siteDescription,
@@ -45,9 +43,9 @@ export const metadata: Metadata = {
     "maquillaje profesional",
     "maquillaje de novias",
     "makeup Colombia",
-    "productos de maquillaje",
-    "bases de maquillaje HD",
-    "brochas profesionales",
+    "maquillaje social",
+    "maquillaje editorial",
+    "clases de automaquillaje",
     "Camila Palacios",
   ],
   authors: [{ name: "Camila Palacios", url: getSiteUrl().href }],
@@ -60,13 +58,13 @@ export const metadata: Metadata = {
     alternateLocale: ["es"],
     siteName: "CamilaPalaciosMakeup",
     title:
-      "CamilaPalaciosMakeup — Maquillaje profesional y productos Colombia",
+      "CamilaPalaciosMakeup — Servicios de maquillaje profesional",
     description: siteDescription,
     url: getSiteUrl().href,
   },
   twitter: {
     card: "summary_large_image",
-    title: "CamilaPalaciosMakeup — Maquillaje profesional y productos",
+    title: "CamilaPalaciosMakeup — Servicios de maquillaje profesional",
     description: siteDescription,
   },
   robots: {
@@ -89,31 +87,31 @@ function organizationJsonLd() {
     "@id": `${url}#business`,
     name: "CamilaPalaciosMakeup",
     description:
-      "Servicios de maquillaje profesional y venta de cosméticos. Eventos, novias y sesiones especiales.",
+      "Servicios de maquillaje profesional para eventos, novias, sesiones fotográficas y clases.",
     url,
     telephone: "+573205489374",
     email: "camilapalaciosmakeup@gmail.com",
-    priceRange: "$$",
     areaServed: { "@type": "Country", name: "Colombia" },
     serviceType: [
       "Maquillaje profesional",
       "Maquillaje de novias",
-      "Ventas de cosméticos",
+      "Maquillaje editorial y fotografía",
+      "Clases de automaquillaje",
     ],
     sameAs: [socialLinks.instagram, socialLinks.facebook],
   };
 }
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const catalogProducts = await loadCatalogProducts();
+  const catalogServices = loadCatalogServices();
   const jsonLd = JSON.stringify(organizationJsonLd());
 
   return (
-    <html lang="es-CO" className="scroll-smooth m-0 min-h-0 h-auto p-0">
+    <html lang="es-CO" className="scroll-smooth m-0 min-h-0 h-auto p-0" suppressHydrationWarning>
       <head>
         <script
           type="application/ld+json"
@@ -124,10 +122,11 @@ export default async function RootLayout({
         className={`${playfair.variable} ${outfit.variable} ${greatVibes.variable} m-0 min-h-0 h-auto p-0 font-sans antialiased`}
       >
         <div id="app-shell">
-          <CatalogProvider products={catalogProducts}>
+          <CatalogProvider services={catalogServices}>
             <CartProvider>
               {children}
               <CartDrawer />
+              <MotionEnhancer />
             </CartProvider>
           </CatalogProvider>
         </div>

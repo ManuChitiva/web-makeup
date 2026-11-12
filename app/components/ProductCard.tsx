@@ -1,69 +1,48 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import type { Product } from "../data/products";
+import type { Service } from "../data/services";
 import { useCart } from "../context/CartContext";
-import ColorSwatches from "./ColorSwatches";
 
-type ProductCardProps = { product: Product };
-
-export default function ProductCard({ product }: ProductCardProps) {
-  const { addItem, getQuantity } = useCart();
-  const imageSrc = product.imageUrl?.trim();
+export default function ProductCard({ service }: { service: Service }) {
+  const { addItem, hasItem } = useCart();
+  const selected = hasItem(service.id);
 
   return (
-    <Link
-      href={`/productos/${product.id}`}
-      className="card-beauty card-beauty--lift group flex flex-col overflow-hidden rounded-2xl border border-[var(--accent-champagne)]/80 bg-white hover:border-[var(--accent-rose)]/45 motion-safe:transition-[border-color]"
-    >
-      <div
-        className={`relative flex h-48 overflow-hidden bg-[var(--accent-champagne)]/25 transition duration-500 ease-out group-hover:bg-[var(--accent-champagne)]/45 ${
-          imageSrc ? "" : "items-center justify-center text-6xl"
-        }`}
-      >
-        {imageSrc ? (
-          /* eslint-disable-next-line @next/next/no-img-element -- URLs externas desde STORE API sin dominios fijos en next.config */
-          <img
-            src={imageSrc}
-            alt=""
-            className="h-full w-full object-cover transition duration-500 ease-out motion-safe:group-hover:scale-[1.04] motion-reduce:group-hover:scale-100"
+    <article data-reveal className="card-beauty group flex flex-col overflow-hidden border border-[var(--accent-champagne)] bg-white">
+      <Link href={`/servicios/${service.id}`} className="block" aria-label={`Ver ${service.name}`}>
+        <div className="relative aspect-[4/5] overflow-hidden bg-[#f0e8df]">
+          <Image
+            src={service.imageUrl}
+            alt={service.imageAlt}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
           />
-        ) : (
-          <span className="transition duration-500 ease-out motion-safe:group-hover:scale-[1.04] motion-reduce:group-hover:scale-100">
-            {product.image}
-          </span>
-        )}
+        </div>
+      </Link>
+      <div className="flex flex-1 flex-col p-5">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--accent-rose)]">{service.category}</p>
+        <Link href={`/servicios/${service.id}`} className="mt-2 font-serif text-xl text-[var(--foreground)] hover:text-[var(--accent-rose-deep)]">
+          {service.name}
+        </Link>
+        <p className="mt-3 mb-5 line-clamp-3 text-sm leading-6 text-[#756963]">{service.description}</p>
+        <div className="mt-auto flex flex-col gap-3">
+          <Link href={`/servicios/${service.id}`} className="button-primary w-full justify-center">
+            Ver servicio <span aria-hidden>↗</span>
+          </Link>
+          {selected ? (
+            <Link href="/carrito" className="service-card__selection">
+              Ver mi selección <span aria-hidden>→</span>
+            </Link>
+          ) : (
+            <button type="button" onClick={() => addItem(service.id)} className="service-card__selection">
+              Agregar a mi selección <span aria-hidden>＋</span>
+            </button>
+          )}
+        </div>
       </div>
-      <div className="flex flex-col p-5">
-        <span className="text-xs font-medium uppercase tracking-wider text-[var(--accent-rose)]">
-          {product.category}
-        </span>
-        <h3 className="mt-1 font-serif text-lg font-semibold text-[var(--accent-rose-deep)]">
-          {product.name}
-        </h3>
-        <p className="mt-2 text-lg font-semibold text-[var(--foreground)]">
-          {product.priceFrom ? "Desde $" : "$"}
-          {product.price}
-        </p>
-        {product.colors && product.colors.length > 0 && (
-          <ColorSwatches colors={product.colors} className="mt-3" />
-        )}
-        <button
-          type="button"
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            addItem(product.id);
-          }}
-          className="mt-4 w-full rounded-full border-2 border-[var(--accent-rose)]/50 py-2.5 text-sm font-medium text-[var(--accent-rose-deep)] shadow-sm transition duration-300 hover:border-[var(--accent-rose)] hover:bg-[var(--accent-champagne)]/35 hover:shadow-[0_6px_20px_rgba(183,110,121,0.2)] motion-reduce:hover:shadow-sm"
-        >
-          {getQuantity(product.id) > 0
-            ? `✓ En carrito (${getQuantity(product.id)})`
-            : product.isService
-              ? "Añadir servicio"
-              : "Añadir al carrito"}
-        </button>
-      </div>
-    </Link>
+    </article>
   );
 }

@@ -1,36 +1,20 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  type ReactNode,
-} from "react";
-import type { Product } from "../data/products";
+import { createContext, useContext, type ReactNode } from "react";
+import type { Service } from "../data/services";
 
-const CatalogContext = createContext<Product[] | null>(null);
+const CatalogContext = createContext<Service[] | null>(null);
 
-export function CatalogProvider({
-  products,
-  children,
-}: {
-  products: Product[];
-  children: ReactNode;
-}) {
-  return (
-    <CatalogContext.Provider value={products}>{children}</CatalogContext.Provider>
-  );
+export function CatalogProvider({ services, children }: { services: Service[]; children: ReactNode }) {
+  return <CatalogContext.Provider value={services}>{children}</CatalogContext.Provider>;
 }
 
-export function useCatalogProducts(): Product[] {
-  const ctx = useContext(CatalogContext);
-  if (!ctx)
-    throw new Error("useCatalogProducts must be used within CatalogProvider");
-  return ctx;
+export function useCatalogServices(): Service[] {
+  const catalog = useContext(CatalogContext);
+  if (!catalog) throw new Error("useCatalogServices must be used within CatalogProvider");
+  return catalog;
 }
 
-export function findProductById(
-  catalog: Product[],
-  id: string
-): Product | undefined {
-  return catalog.find((p) => p.id === id);
+export function findServiceById(catalog: Service[], id: string): Service | undefined {
+  return catalog.find((service) => service.id === id);
 }

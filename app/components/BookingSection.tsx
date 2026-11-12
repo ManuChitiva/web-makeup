@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import { whatsappUrlWithText } from "@/lib/social";
+import { CATALOG_SERVICES } from "../data/services";
 
-const serviceTypes = [
-  "Maquillaje social",
-  "Novias",
-  "Editorial / Fotografía",
-  "Clase o asesoría",
-];
+const serviceTypes = CATALOG_SERVICES.map((service) => service.name);
 
 function formatDateEs(iso: string): string {
   if (!iso) return "—";
@@ -84,7 +80,7 @@ export default function BookingSection() {
     return (
       <section
         id="reservas"
-        className="scroll-mt-24 py-20 px-6"
+        className="booking-editorial scroll-mt-24"
       >
         <div className="card-beauty mx-auto max-w-xl rounded-2xl border border-[var(--accent-champagne)] bg-[var(--accent-champagne)]/25 p-10 text-center">
           <div className="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-[var(--accent-rose)]/20 text-3xl">
@@ -110,24 +106,27 @@ export default function BookingSection() {
   }
 
   return (
-    <section
-      id="reservas"
-      className="scroll-mt-24 border-y border-[var(--accent-champagne)]/50 py-20 px-6"
-    >
-      <div className="mx-auto max-w-2xl">
-        <div className="text-center">
-          <h2 className="font-serif text-3xl font-bold text-[var(--accent-rose-deep)] sm:text-4xl">
-            Agendar reserva
-          </h2>
-          <p className="mt-3 text-[var(--foreground)]/70">
-            Completa el formulario: te llevamos a WhatsApp con el mensaje listo
-            para enviar.
-          </p>
+    <section id="reservas" className="booking-editorial scroll-mt-24" aria-labelledby="booking-title">
+      <div className="section-container booking-editorial__grid">
+        <div className="booking-editorial__intro" data-reveal>
+          <p className="eyebrow"><span /> HAGÁMOSLO REALIDAD</p>
+          <h2 id="booking-title" className="display-title">Tu próximo look <em>comienza aquí.</em></h2>
+          <p>Cuéntame qué tienes en mente y encontraremos la propuesta ideal para tu ocasión.</p>
+          <div className="booking-editorial__steps">
+            <div><span>01</span><p>Cuéntame sobre tu evento y la fecha que tienes en mente.</p></div>
+            <div><span>02</span><p>Te responderé por WhatsApp para coordinar los detalles.</p></div>
+          </div>
+          <p className="booking-editorial__note">Cada cita comienza con una conversación.</p>
         </div>
         <form
           onSubmit={handleSubmit}
-          className="card-beauty mt-10 flex flex-col gap-5 rounded-2xl border border-[var(--accent-champagne)] bg-[var(--background)] p-6 sm:p-8"
+          className="booking-editorial__form flex flex-col gap-5"
+          data-reveal
         >
+          <div className="booking-editorial__form-heading">
+            <span>FORMULARIO DE RESERVA</span>
+            <p>Completa tus datos y prepara tu mensaje para WhatsApp.</p>
+          </div>
           <div className="grid gap-5 sm:grid-cols-2">
             <label className="flex flex-col gap-1.5">
               <span className="text-sm font-medium text-[var(--foreground)]">
@@ -154,7 +153,7 @@ export default function BookingSection() {
                 onChange={handleChange}
                 required
                 className="rounded-lg border border-[var(--accent-champagne)] bg-white px-4 py-2.5 text-[var(--foreground)] outline-none focus:border-[var(--accent-rose)] focus:ring-2 focus:ring-[var(--accent-rose)]/20"
-                placeholder="+56 9 1234 5678"
+                placeholder="+57 320 123 4567"
               />
             </label>
           </div>
@@ -221,9 +220,9 @@ export default function BookingSection() {
           </label>
           <button
             type="submit"
-            className="mt-2 rounded-full bg-[var(--accent-rose-deep)] py-3.5 font-medium text-white transition hover:bg-[var(--accent-rose)]"
+            className="button-primary mt-2 w-full justify-center"
           >
-            Continuar en WhatsApp
+            Continuar en WhatsApp <span aria-hidden>↗</span>
           </button>
         </form>
       </div>

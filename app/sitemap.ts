@@ -1,33 +1,18 @@
 import type { MetadataRoute } from "next";
-import { loadCatalogProducts } from "@/lib/catalog";
+import { loadCatalogServices } from "@/lib/catalog";
 import { getSiteUrl } from "@/lib/site";
 
-export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+export default function sitemap(): MetadataRoute.Sitemap {
   const base = getSiteUrl().origin;
-  const catalog = await loadCatalogProducts();
-  const ids = new Set<string>();
-  for (const p of catalog) ids.add(p.id);
-
   const entries: MetadataRoute.Sitemap = [
-    {
-      url: base,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${base}/productos`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.88,
-    },
+    { url: base, changeFrequency: "weekly", priority: 1 },
+    { url: `${base}/servicios`, changeFrequency: "weekly", priority: 0.9 },
   ];
 
-  for (const id of ids) {
+  for (const service of loadCatalogServices()) {
     entries.push({
-      url: `${base}/productos/${id}`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
+      url: `${base}/servicios/${service.id}`,
+      changeFrequency: "monthly",
       priority: 0.7,
     });
   }

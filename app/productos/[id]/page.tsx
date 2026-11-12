@@ -1,61 +1,8 @@
-import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { getSiteUrl } from "@/lib/site";
-import { resolveProductById } from "@/lib/catalog";
-import Header from "../../components/Header";
-import ProductDetail from "../../components/ProductDetail";
+import { redirect } from "next/navigation";
 
 type PageProps = { params: Promise<{ id: string }> };
 
-export default async function ProductPage({ params }: PageProps) {
+export default async function LegacyProductPage({ params }: PageProps) {
   const { id } = await params;
-  const product = await resolveProductById(id);
-  if (!product) notFound();
-
-  return (
-    <div className="site-content w-full bg-[var(--background)]">
-      <Header />
-      <main className="pt-20">
-        <ProductDetail product={product} />
-      </main>
-    </div>
-  );
-}
-
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { id } = await params;
-  const product = await resolveProductById(id);
-  if (!product) return { title: "Elemento no encontrado", robots: { index: false } };
-  const itemType = product.isService ? "servicio" : "producto";
-
-  const description =
-    product.description ??
-    `${product.name} — ${itemType} disponible en CamilaPalaciosMakeup.`;
-
-  const path = `/productos/${id}`;
-
-  return {
-    title: product.name,
-    description,
-    keywords: [
-      product.name,
-      product.category,
-      "maquillaje",
-      itemType,
-      product.sku ?? "",
-    ].filter(Boolean),
-    alternates: { canonical: path },
-    openGraph: {
-      title: product.name,
-      description,
-      url: `${getSiteUrl().origin}${path}`,
-      type: "website",
-      locale: "es_CO",
-    },
-    twitter: {
-      card: "summary",
-      title: product.name,
-      description,
-    },
-  };
+  redirect(`/servicios/${encodeURIComponent(id)}`);
 }

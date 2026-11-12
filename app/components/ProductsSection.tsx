@@ -1,52 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import type { Product } from "../data/products";
+import type { Service } from "../data/services";
 import ProductCard from "./ProductCard";
 
-type ProductsSectionProps = { products: Product[] };
+type ProductsSectionProps = { services: Service[] };
 
-export default function ProductsSection({ products }: ProductsSectionProps) {
+export default function ProductsSection({ services }: ProductsSectionProps) {
   return (
     <section
-      id="productos"
-      className="scroll-mt-24 py-20 px-6"
+      id="servicios"
+      className="products-editorial scroll-mt-24"
     >
-      <div className="mx-auto max-w-7xl">
-        <div className="text-center">
-          <h2 className="font-serif text-3xl font-bold text-[var(--accent-rose-deep)] sm:text-4xl">
-            Servicios destacados
-          </h2>
-          <p className="mt-3 text-[var(--foreground)]/70">
-            Una muestra del catálogo. Entra para ver todos, filtrar y paginar.
+      <div className="section-container">
+        <div className="section-heading-row" data-reveal>
+          <div>
+            <p className="eyebrow"><span /> NUESTROS SERVICIOS</p>
+            <h2 className="display-title">Un look para <em>cada momento.</em></h2>
+          </div>
+          <p className="section-intro">
+            Cada rostro tiene algo único. Descubre el servicio que mejor acompaña tu ocasión.
           </p>
         </div>
 
-        <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 md:gap-y-10">
-          {products.length === 0 ? (
+        <div className="products-editorial__grid grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4 md:gap-x-6 md:gap-y-10">
+          {services.length === 0 ? (
             <p className="col-span-full text-center text-sm text-[var(--foreground)]/70">
-              Aún no hay productos públicos desde la tienda. Revisa tu API o
-              añade artículos activos.
+              Pronto encontrarás aquí nuestros servicios.
             </p>
           ) : (
-            products.map((product) => (
-              <ProductCard key={product.id} product={product} />
+            services.map((service) => (
+              <ProductCard key={service.id} service={service} />
             ))
           )}
         </div>
 
-        <div className="mt-12 flex justify-center">
+        <div className="mt-12 flex justify-center" data-reveal>
           <Link
-            href="/productos"
-            className="rounded-full border-2 border-[var(--accent-rose-deep)] bg-[var(--accent-rose-deep)] px-8 py-3 text-sm font-semibold text-white shadow-[0_4px_14px_rgba(139,67,82,0.3)] transition hover:bg-[var(--accent-rose)] hover:shadow-[0_8px_24px_rgba(183,110,121,0.38)]"
+            href="/servicios"
+            className="button-outline"
           >
-            Ver catálogo completo
+            Ver todos los servicios <span aria-hidden>↗</span>
           </Link>
         </div>
-
-        <p className="mt-6 text-center text-sm text-[var(--foreground)]/60">
-          Añade servicios al carrito y consulta por WhatsApp para reservar.
-        </p>
+        <p className="mt-6 text-center text-xs text-[#81736d]">Fotografías de referencia de cada tipo de servicio.</p>
       </div>
     </section>
   );

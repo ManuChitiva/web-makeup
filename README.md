@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Camila Palacios Makeup Studio
 
-## Getting Started
+Sitio de maquillaje hecho con Next.js. El catálogo de servicios es local y no requiere backend ni claves de API.
 
-First, run the development server:
+## Desarrollo
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abre [http://localhost:3000](http://localhost:3000).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Catálogo de servicios
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Los servicios se editan en `app/data/services.ts` y sus fotografías locales están en `public/services/`. La selección abre WhatsApp con una consulta preparada. La disponibilidad y el valor se coordinan directamente; esta web no crea pedidos ni procesa pagos.
 
-## Learn More
+La sección de reservas también abre WhatsApp con el mensaje preparado. Los enlaces de redes sociales y WhatsApp funcionan sin consumir una API desde el sitio.
 
-To learn more about Next.js, take a look at the following resources:
+Las fotografías de servicios son referencias visuales de Unsplash, no trabajos del estudio: [maquillaje social](https://unsplash.com/photos/a-woman-with-makeup-on-her-face-posing-for-a-picture-u65AB6gtL34) por Dmitriy Ilkevich, [novias](https://unsplash.com/photos/bride-having-makeup-applied-by-a-makeup-artist-OWunn6bxGGg) por Alexander Mass, [editorial](https://unsplash.com/photos/makeup-artist-applying-foundation-to-a-womans-face-9WecIIPETPY) por Vitaly Gariev y [automaquillaje](https://unsplash.com/photos/woman-using-makeup-during-daytime-fzJKgGoFoYQ) por Annie Spratt.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Validación
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run lint
+npm run build
+```

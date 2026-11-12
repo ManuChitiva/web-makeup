@@ -1,17 +1,9 @@
-import { cache } from "react";
-import type { Product } from "@/app/data/products";
-import { fetchMappedStoreCatalog } from "@/lib/store-catalog-api";
+import { CATALOG_SERVICES, type Service } from "@/app/data/services";
 
-/**
- * Solo productos desde la STORE API (vacío si no hay env / fallo / sin datos).
- */
-export const loadCatalogProducts = cache(async (): Promise<Product[]> => {
-  return fetchMappedStoreCatalog();
-});
+export function loadCatalogServices(): Service[] {
+  return CATALOG_SERVICES;
+}
 
-export const resolveProductById = cache(
-  async (id: string): Promise<Product | undefined> => {
-    const catalog = await loadCatalogProducts();
-    return catalog.find((p) => p.id === id);
-  },
-);
+export function resolveServiceById(id: string): Service | undefined {
+  return CATALOG_SERVICES.find((service) => service.id === id.trim());
+}

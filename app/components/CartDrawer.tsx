@@ -1,164 +1,58 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
 import { useCart } from "../context/CartContext";
-import {
-  findProductById,
-  useCatalogProducts,
-} from "../context/CatalogContext";
+import { findServiceById, useCatalogServices } from "../context/CatalogContext";
 
 export default function CartDrawer() {
-  const [mounted, setMounted] = useState(false);
-  const catalogProducts = useCatalogProducts();
-  const { items, removeItem, updateQuantity, totalItems, isOpen, closeCart } =
-    useCart();
+  const catalog = useCatalogServices();
+  const { items, totalItems, isOpen, closeCart, removeItem } = useCart();
+  if (!isOpen) return null;
+  const services = items.flatMap((id) => {
+    const service = findServiceById(catalog, id);
+    return service ? [service] : [];
+  });
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const total = items.reduce((sum, item) => {
-    const product = findProductById(catalogProducts, item.productId);
-    return sum + (product ? product.priceNumber * item.quantity : 0);
-  }, 0);
-
-  const formatPrice = (n: number) =>
-    new Intl.NumberFormat("es-CL").format(n);
-
-  if (!isOpen || !mounted) return null;
-
-  return createPortal(
-    <>
-      <div
-        className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm"
-        aria-hidden
-        onClick={closeCart}
-      />
-      <aside
-        className="fixed right-0 top-0 z-50 flex h-full w-full max-w-md flex-col bg-[var(--background)] shadow-2xl animate-drawer-in"
-        role="dialog"
-        aria-label="Carrito de compras"
-      >
-        <div className="flex items-center justify-between border-b border-[var(--accent-champagne)]/50 px-6 py-4">
-          <h2 className="font-serif text-xl font-semibold text-[var(--accent-rose-deep)]">
-            Tu carrito
-          </h2>
-          <button
-            type="button"
-            onClick={closeCart}
-            className="rounded-full p-2 text-[var(--foreground)]/70 transition hover:bg-[var(--accent-champagne)]/50 hover:text-[var(--foreground)]"
-            aria-label="Cerrar carrito"
-          >
-            <span className="text-xl">×</span>
-          </button>
+  return (
+    <div className="fixed inset-0 z-[60]">
+      <button type="button" className="absolute inset-0 w-full bg-black/40" onClick={closeCart} aria-label="Cerrar selección" />
+      <aside className="animate-drawer-in absolute inset-y-0 right-0 flex w-full max-w-md flex-col bg-[var(--background)] shadow-2xl" role="dialog" aria-modal="true" aria-label="Mi selección de servicios">
+        <div className="flex items-center justify-between border-b border-[#ded2c7] px-6 py-5">
+          <h2 className="font-serif text-2xl text-[var(--foreground)]">Mi selección</h2>
+          <button type="button" onClick={closeCart} className="text-2xl text-[var(--accent-rose-deep)]" aria-label="Cerrar selección">×</button>
         </div>
-        <div className="flex-1 overflow-y-auto px-6 py-4">
-          {items.length === 0 ? (
-            <div className="flex flex-col items-center justify-center gap-3 py-12 text-center">
-              <span className="text-5xl opacity-50">🛒</span>
-              <p className="text-[var(--foreground)]/70">
-                Tu carrito está vacío. Añade servicios desde la sección
-                Productos.
-              </p>
-              <button
-                type="button"
-                onClick={closeCart}
-                className="mt-2 rounded-full bg-[var(--accent-rose-deep)] px-5 py-2.5 text-sm font-medium text-white transition hover:bg-[var(--accent-rose)]"
-              >
-                Ver servicios
-              </button>
-            </div>
-          ) : (
-            <ul className="space-y-4">
-              {items.map((item) => {
-                const product = findProductById(catalogProducts, item.productId);
-                if (!product) return null;
-                return (
-                  <li
-                    key={item.productId}
-                    className="card-beauty--soft flex gap-4 rounded-xl border border-[var(--accent-champagne)]/50 bg-[var(--background)] p-3 motion-safe:transition-shadow"
-                  >
-                    <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-[var(--accent-champagne)]/30 text-2xl">
-                      {product.image}
-                    </span>
-                    <div className="min-w-0 flex-1">
-                      <p className="font-medium text-[var(--accent-rose-deep)]">
-                        {product.name}
-                      </p>
-                      <p className="text-sm text-[var(--foreground)]/70">
-                        ${product.price}
-                      </p>
-                      <div className="mt-2 flex items-center gap-2">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateQuantity(
-                              item.productId,
-                              Math.max(0, item.quantity - 1)
-                            )
-                          }
-                          className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--accent-champagne)] text-sm font-medium transition hover:bg-[var(--accent-champagne)]/50"
-                          aria-label="Quitar una unidad"
-                        >
-                          −
-                        </button>
-                        <span className="min-w-[1.5rem] text-center text-sm font-medium">
-                          {item.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() =>
-                            updateQuantity(item.productId, item.quantity + 1)
-                          }
-                          className="flex h-7 w-7 items-center justify-center rounded-full border border-[var(--accent-champagne)] text-sm font-medium transition hover:bg-[var(--accent-champagne)]/50"
-                          aria-label="Añadir una unidad"
-                        >
-                          +
-                        </button>
-                      </div>
-                    </div>
-                    <div className="flex flex-col items-end justify-between">
-                      <button
-                        type="button"
-                        onClick={() => removeItem(item.productId)}
-                        className="text-[var(--foreground)]/50 transition hover:text-[var(--accent-rose)]"
-                        aria-label="Eliminar del carrito"
-                      >
-                        <span className="text-lg">×</span>
-                      </button>
-                      <p className="text-sm font-semibold text-[var(--foreground)]">
-                        ${formatPrice(product.priceNumber * item.quantity)}
-                      </p>
-                    </div>
-                  </li>
-                );
-              })}
+        <div className="flex-1 overflow-y-auto px-6 py-5">
+          {services.length ? (
+            <ul className="space-y-5">
+              {services.map((service) => (
+                <li key={service.id} className="flex gap-4 border-b border-[#e6dcd3] pb-5">
+                  <div className="relative h-20 w-20 shrink-0 bg-[#f0e8df]">
+                    <Image src={service.imageUrl} alt="" fill sizes="80px" className="object-cover" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <Link href={`/servicios/${service.id}`} onClick={closeCart} className="font-serif text-lg leading-6">{service.name}</Link>
+                    <p className="mt-1 text-xs text-[var(--accent-rose-deep)]">{service.category}</p>
+                  </div>
+                  <button type="button" onClick={() => removeItem(service.id)} className="self-start text-xl text-[#8b7c75]" aria-label={`Quitar ${service.name}`}>×</button>
+                </li>
+              ))}
             </ul>
+          ) : (
+            <div className="py-16 text-center">
+              <p className="font-serif text-2xl">Aún no has elegido servicios</p>
+              <p className="mt-3 text-sm text-[#81736d]">Explora las opciones y guarda las que te interesan.</p>
+              <Link href="/servicios" onClick={closeCart} className="button-outline mt-7">Ver servicios <span aria-hidden>↗</span></Link>
+            </div>
           )}
         </div>
-        {items.length > 0 && (
-          <div className="border-t border-[var(--accent-champagne)]/50 px-6 py-4">
-            <div className="flex items-center justify-between text-lg font-semibold text-[var(--accent-rose-deep)]">
-              <span>Total ({totalItems} {totalItems === 1 ? "servicio" : "servicios"})</span>
-              <span>${formatPrice(total)}</span>
-            </div>
-            <p className="mt-2 text-center text-sm text-[var(--foreground)]/60">
-              Revisa el total y completa el pago (PayU) o pide por WhatsApp desde
-              la página de carrito.
-            </p>
-            <Link
-              href="/carrito"
-              onClick={closeCart}
-              className="mt-4 flex w-full items-center justify-center rounded-full bg-[var(--accent-rose-deep)] py-3 text-center font-medium text-white shadow-md transition hover:bg-[var(--accent-rose)]"
-            >
-              Ver resumen y pagar
-            </Link>
+        {services.length > 0 && (
+          <div className="border-t border-[#ded2c7] px-6 py-6">
+            <p className="text-sm text-[#756963]">{totalItems} servicio{totalItems === 1 ? "" : "s"} en tu selección</p>
+            <Link href="/carrito" onClick={closeCart} className="button-primary mt-5 flex w-full">Consultar selección <span aria-hidden>↗</span></Link>
           </div>
         )}
       </aside>
-    </>,
-    document.body
+    </div>
   );
 }

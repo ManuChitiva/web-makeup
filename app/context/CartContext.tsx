@@ -1,48 +1,17 @@
 "use client";
 
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-  useCallback,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { CATALOG_SERVICES } from "../data/services";
 
-const CART_STORAGE_KEY = "camilapalaciosmakeup-cart";
+const STORAGE_KEY = "camilapalaciosmakeup-services-selection";
+const serviceIds = new Set(CATALOG_SERVICES.map((service) => service.id));
 
-function parseStoredCart(raw: string | null): CartItem[] {
-  if (!raw) return [];
-  try {
-    const data = JSON.parse(raw) as unknown;
-    if (!Array.isArray(data)) return [];
-    return data.filter(
-      (row): row is CartItem =>
-        row != null &&
-        typeof row === "object" &&
-        "productId" in row &&
-        "quantity" in row &&
-        typeof (row as CartItem).productId === "string" &&
-        typeof (row as CartItem).quantity === "number" &&
-        (row as CartItem).quantity >= 1
-    );
-  } catch {
-    return [];
-  }
-}
-
-export type CartItem = {
-  productId: string;
-  quantity: number;
-};
-
-type CartContextType = {
-  items: CartItem[];
-  addItem: (productId: string, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+type SelectionContextType = {
+  items: string[];
+  addItem: (serviceId: string) => void;
+  removeItem: (serviceId: string) => void;
   clear: () => void;
-  getQuantity: (productId: string) => number;
+  hasItem: (serviceId: string) => boolean;
   totalItems: number;
   isOpen: boolean;
   openCart: () => void;
@@ -50,95 +19,65 @@ type CartContextType = {
   toggleCart: () => void;
 };
 
-const CartContext = createContext<CartContextType | null>(null);
+const SelectionContext = createContext<SelectionContextType | null>(null);
+
+function parseSelection(raw: string | null): string[] {
+  if (!raw) return [];
+  try {
+    const value: unknown = JSON.parse(raw);
+    return Array.isArray(value)
+      ? [...new Set(value.filter((id): id is string => typeof id === "string" && serviceIds.has(id)))]
+      : [];
+  } catch {
+    return [];
+  }
+}
 
 export function CartProvider({ children }: { children: ReactNode }) {
-  const [items, setItems] = useState<CartItem[]>([]);
+  const [items, setItems] = useState<string[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
-    setItems(parseStoredCart(localStorage.getItem(CART_STORAGE_KEY)));
-    setHydrated(true);
+    const stored = parseSelection(window.localStorage.getItem(STORAGE_KEY));
+    queueMicrotask(() => {
+      setItems(stored);
+      setHydrated(true);
+    });
   }, []);
 
   useEffect(() => {
     if (!hydrated) return;
     try {
-      localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
     } catch {
-      /* ignore quota / private mode */
+      // La selección sigue funcionando en memoria si el navegador bloquea el almacenamiento.
     }
   }, [items, hydrated]);
 
-  const addItem = useCallback((productId: string, quantity = 1) => {
-    setItems((prev) => {
-      const existing = prev.find((i) => i.productId === productId);
-      if (existing) {
-        return prev.map((i) =>
-          i.productId === productId
-            ? { ...i, quantity: i.quantity + quantity }
-            : i
-        );
-      }
-      return [...prev, { productId, quantity }];
-    });
+  const addItem = useCallback((serviceId: string) => {
+    if (!serviceIds.has(serviceId)) return;
+    setItems((previous) => previous.includes(serviceId) ? previous : [...previous, serviceId]);
     setIsOpen(true);
   }, []);
-
-  const removeItem = useCallback((productId: string) => {
-    setItems((prev) => prev.filter((i) => i.productId !== productId));
+  const removeItem = useCallback((serviceId: string) => {
+    setItems((previous) => previous.filter((id) => id !== serviceId));
   }, []);
-
-  const updateQuantity = useCallback((productId: string, quantity: number) => {
-    if (quantity < 1) {
-      removeItem(productId);
-      return;
-    }
-    setItems((prev) =>
-      prev.map((i) =>
-        i.productId === productId ? { ...i, quantity } : i
-      )
-    );
-  }, [removeItem]);
-
   const clear = useCallback(() => setItems([]), []);
-
-  const getQuantity = useCallback(
-    (productId: string) =>
-      items.find((i) => i.productId === productId)?.quantity ?? 0,
-    [items]
-  );
-
-  const totalItems = items.reduce((sum, i) => sum + i.quantity, 0);
-
+  const hasItem = useCallback((serviceId: string) => items.includes(serviceId), [items]);
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
-  const toggleCart = useCallback(() => setIsOpen((o) => !o), []);
+  const toggleCart = useCallback(() => setIsOpen((open) => !open), []);
 
   return (
-    <CartContext.Provider
-      value={{
-        items,
-        addItem,
-        removeItem,
-        updateQuantity,
-        clear,
-        getQuantity,
-        totalItems,
-        isOpen,
-        openCart,
-        closeCart,
-        toggleCart,
-      }}
-    >
+    <SelectionContext.Provider value={{ items, addItem, removeItem, clear, hasItem, totalItems: items.length, isOpen, openCart, closeCart, toggleCart }}>
       {children}
-    </CartContext.Provider>
+    </SelectionContext.Provider>
   );
 }
 
-export function useCart() {
-  const ctx = useContext(CartContext);
-  if (!ctx) throw new Error("useCart must be used within CartProvider");
-  return ctx;
+export function useCart(): SelectionContextType {
+  const context = useContext(SelectionContext);
+  if (!context) throw new Error("useCart must be used within CartProvider");
+  return context;
 }
